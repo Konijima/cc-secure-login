@@ -21,4 +21,4 @@ end
 -- Start
 parallel.waitForAll(table.unpack(downloads))
 
-print('Secure Login installed, run `secure/setup` to secure your computer!')
+print('Secure Login installed, run `secure/setup.lua` to secure your computer!')
