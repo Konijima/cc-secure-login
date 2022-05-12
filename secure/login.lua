@@ -1,6 +1,6 @@
 local sha256 = require('/secure/sha256')
 
-local credentials
+local credentials, credentialsDigest
 
 local function clear()
     term.clear()
@@ -22,15 +22,14 @@ local function recoveryLogin()
 
                 local function safeRead()
                     local reader = fs.open(recoveryPath, 'r')
-                    local json = reader.readAll()
+                    local recovery = reader.readAll()
                     reader.close()
-
-                    return sha256.digest(json):toHex()
+                    return recovery
                 end
 
                 local status, recovery = pcall(safeRead)
                 if status then
-                    return recovery == sha256.digest(textutils.serialiseJSON(credentials)):toHex()
+                    return recovery == credentialsDigest
                 end
             end
         end
@@ -78,6 +77,7 @@ if fs.exists('.login') then
     local json = reader.readAll()
     reader.close()
 
+    credentialsDigest = sha256.digest(json):toHex()
     credentials = textutils.unserialiseJSON(json)
 
     if not recoveryLogin() then
