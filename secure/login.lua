@@ -9,7 +9,7 @@ end
 
 local function writeError(message)
     term.setTextColour(colors.red)
-    term.write('(' .. message .. ')')
+    print('(' .. message .. ')')
     term.setTextColour(colors.white)
 end
 
@@ -42,9 +42,9 @@ local function login()
     -- Prompt username
     while username ~= credentials.username or not status do
         clear()
-        io.write('SECURE LOGIN ')
+        print('SECURE LOGIN')
         if message then writeError(message) end
-        io.write('\nUsername > ')
+        io.write('Username > ')
         status, username = pcall(read)
         if username ~= credentials.username then message = 'User ' .. username .. ' not found!' end
         if username == '' then message = 'Username cannot be empty!' end
@@ -56,9 +56,9 @@ local function login()
     -- Prompt password
     while not passwordMatch or not status do
         clear()
-        io.write('SECURE LOGIN ')
+        print('SECURE LOGIN')
         if message then writeError(message) end
-        print('\nUsername > ' .. username)
+        print('Username > ' .. username)
         io.write('Password > ')
         status, password = pcall(read)
         passwordMatch = sha256.hmac(os.getComputerID(), password):toHex() == credentials.password
