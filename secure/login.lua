@@ -24,12 +24,13 @@ local function recoveryLogin()
                     local reader = fs.open(recoveryPath, 'r')
                     local json = reader.readAll()
                     reader.close()
-                    return textutils.unserialiseJSON(json)
+
+                    return sha256.digest(json):toHex()
                 end
 
                 local status, recovery = pcall(safeRead)
-                if status and type(recovery.username) == 'string' and type(recovery.password) == 'string' then
-                    return recovery.username == credentials.username and recovery.password == credentials.password
+                if status then
+                    return recovery == sha256.digest(textutils.serialiseJSON(credentials)):toHex()
                 end
             end
         end

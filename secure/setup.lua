@@ -28,9 +28,9 @@ end
 credentials.password = sha256.hmac(os.getComputerID(), credentials.password):toHex()
 
 -- Save credential to .login on root
-local json = textutils.serialiseJSON(credentials)
+local credentialsJson = textutils.serialiseJSON(credentials)
 local fw = fs.open('.login', 'w')
-fw.write(json)
+fw.write(credentialsJson)
 fw.close()
 
 -- Delete existing startup.lua
@@ -79,7 +79,11 @@ if #sides > 0 then
         if selected then
             local savePath = fs.combine(disk.getMountPath(selected), '.recovery')
             if fs.exists(savePath) then fs.delete(savePath) end
-            fs.copy('.login', savePath)
+
+            local writer = fs.open(savePath, 'w')
+            writer.write(sha256.digest(credentialsJson):toHex())
+            writer.close()
+
             local computerName = os.getComputerLabel() or os.getComputerID()
             disk.setLabel(selected, 'Recovery Disk [' .. computerName .. ']')
         end
