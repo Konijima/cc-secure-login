@@ -20,3 +20,11 @@ secure/setup.lua
 If a disk with a floppy inside is found during the setup, you will be prompted to create a recovery disk.
 
 Using a valid recovery disk will bypass the login screen on reboot, **so keep it safe**.
+
+## Startup
+If you want your startup to do other thing after login just edit it and add what you want after the first line.
+```startup.lua
+shell.run('/secure/login')
+
+-- My other stuff here
+```
