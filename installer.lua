@@ -9,7 +9,10 @@ local files = {
 local downloads = {}
 for i,file in ipairs(files) do
     local function download()
-        local script = http.get(url .. file).readAll()
+        local request = http.get(url .. file)
+        local script = request.readAll()
+        request.close()
+        
         if fs.exists(file) then fs.delete(file) end
         local writer = fs.open(file, 'w')
         writer.write(script)
